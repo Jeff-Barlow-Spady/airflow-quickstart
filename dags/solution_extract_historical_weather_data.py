@@ -4,7 +4,7 @@
 # PACKAGE IMPORTS #
 # --------------- #
 
-from airflow import Dataset
+from airflow.datasets import Dataset
 from airflow.decorators import dag, task
 from pendulum import datetime
 import pandas as pd

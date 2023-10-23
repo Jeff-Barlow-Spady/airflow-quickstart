@@ -56,6 +56,7 @@ def create_historical_weather_reporting_table(in_table: Table, hot_day_celsius: 
 # of birth is not available for your city). Make sure the function returns a pandas dataframe
 # Tip: the returned dataframe will be shown in your streamlit App.
 
+
 # SOLUTION: One of many possible solutions to retrieve the warmest day by year by city
 @aql.dataframe(pool="duckdb")
 def find_hottest_day_birthyear(in_table: pd.DataFrame, birthyear: int):
@@ -112,7 +113,6 @@ def find_hottest_day_birthyear(in_table: pd.DataFrame, birthyear: int):
     tags=["part_2", "solution"],
 )
 def solution_transform_historical_weather():
-
     create_historical_weather_reporting_table(
         in_table=Table(
             name=c.IN_HISTORICAL_WEATHER_TABLE_NAME, conn_id=gv.CONN_ID_DUCKDB
