@@ -1,2 +1,6 @@
+postgres:
+  port: "5433"
 project:
   name: quickstart
+webserver:
+  port: "8081"
