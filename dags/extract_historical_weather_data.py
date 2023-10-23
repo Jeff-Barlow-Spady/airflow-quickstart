@@ -3,12 +3,12 @@
 # --------------- #
 # PACKAGE IMPORTS #
 # --------------- #
-
+from typing import Dict
 from airflow import Dataset
 from airflow.decorators import dag, task
 from pendulum import datetime
 import pandas as pd
-from typing import Dict
+
 
 # import tools from the Astro SDK
 from astro import sql as aql

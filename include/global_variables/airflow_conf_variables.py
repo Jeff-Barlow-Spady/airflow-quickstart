@@ -37,4 +37,4 @@ default_args = {
 }
 
 # default coordinates
-default_coordinates = {"city": "Edmonton", "lat": 53.5461, "long": -113.4937}
+default_coordinates = {"city": "none", "lat": 0, "long": 0}
