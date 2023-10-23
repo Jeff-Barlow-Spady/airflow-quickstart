@@ -105,7 +105,7 @@ def find_hottest_day_birthyear(in_table: pd.DataFrame, birthyear: int):
 @dag(
     start_date=datetime(2023, 1, 1),
     # SOLUTION: Run this DAG as soon as the Astro Python SDK Table where ingested historical weather data is stored is updated
-    schedule=[in_historical_weather],
+    schedule=[in_historical_weather_dataset],
     catchup=False,
     default_args=gv.default_args,
     description="Runs transformations on climate and current weather data in DuckDB.",
