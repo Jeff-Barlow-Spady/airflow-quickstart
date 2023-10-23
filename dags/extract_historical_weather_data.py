@@ -4,9 +4,11 @@
 # PACKAGE IMPORTS #
 # --------------- #
 
+from airflow import Dataset
 from airflow.decorators import dag, task
 from pendulum import datetime
 import pandas as pd
+from typing import Dict
 
 # import tools from the Astro SDK
 from astro import sql as aql
@@ -23,17 +25,16 @@ from include.meterology_utils import (
     get_historical_weather_from_city_coordinates,
 )
 
-
-
 # -------- #
 # Datasets #
 # -------- #
 
 start_dataset = Dataset("start")
 
-# --- #
-# DAG #
-# --- #
+
+# ----------------- #
+# Astro SDK Queries #
+# ----------------- #
 
 
 @aql.dataframe(pool="duckdb")
@@ -46,6 +47,11 @@ def turn_json_into_table(in_json):
     return df
 
 
+# --- #
+# DAG #
+# --- #
+
+
 # ---------- #
 # Exercise 1 #
 # ---------- #
@@ -55,15 +61,16 @@ def turn_json_into_table(in_json):
 
 @dag(
     start_date=datetime(2023, 1, 1),
+    # SOLUTION: schedule the DAG to run on the DS_START Dataset Dataset("start")
     schedule=[start_dataset],
     catchup=False,
     default_args=gv.default_args,
     description="DAG that retrieves weather information and saves it to a local JSON.",
-    tags=["part_2"],
+    tags=["part_2", "solution"],
     # render Jinja templates as native objects (e.g. dictionary) instead of strings
     render_template_as_native_obj=True,
 )
-def extract_historical_weather_data():
+def solution_extract_historical_weather_data():
     @task
     def get_lat_long_for_city(city):
         """Use the 'get_lat_long_for_cityname' function from the local
@@ -90,13 +97,10 @@ def extract_historical_weather_data():
     # Modify the following two lines of code so that both the 'get_lat_long_for_city' task
     # and the 'get_historical_weather' run on a whole list of cities. Choose 3-5 cities
     # to retrieve historical weather data for.
-    # Tip: This task can be accomplished by using Dynamic Task Mapping and you only need to modify two lines of code.
+    # Tip: This task can be accomplished by using Dynamic Task Mapping.
 
-    coordinates = get_lat_long_for_city.expand(city=["Edmonton",
-                                                     "Toronto", 
-                                                     "Montreal",
-                                                     "Vancouver", 
-                                                     "Halifax"])
+    # SOLUTION: Map both tasks using .expand. Note that the city input has to be a list of cities!
+    coordinates = get_lat_long_for_city.expand(city=["Edmonton", "Toronto", "Montreal", "Vancouver", "Halifax"])
     historical_weather = get_historical_weather.expand(coordinates=coordinates)
 
     # use the @aql.dataframe decorated function to write the (list of) JSON(s) returned from
@@ -109,4 +113,4 @@ def extract_historical_weather_data():
     )
 
 
-extract_historical_weather_data()
+solution_extract_historical_weather_data()
